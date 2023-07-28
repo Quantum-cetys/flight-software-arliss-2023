@@ -1,0 +1,5 @@
+{
+    "board": "arduino:avr:uno",
+    "programmer": "arduinoisp",
+    "sketch": "Arliss_implementacion_inicial\\Arliss_implementacion_inicial.ino"
+}
