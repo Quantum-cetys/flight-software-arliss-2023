@@ -1,5 +1,4 @@
 //Implementaicon inicial del codigo final hecho por Tomas con la idea que los demas puedan llenar los otros componentes
-//un cambio al codigo!!!
 
 //################ Iniciar librerias ###################//
 
@@ -48,9 +47,9 @@ float gps_longitud_actual = 0; // longitud
 float altura_inicial = 0; // Una captura de la altura en metros del robot al inicio (Idealmente que sea cerca al piso)
 
 
-
-
-
+///// variables helpers (variables que ayudan!)
+bool timer_activado_fase0 = false;
+unsigned long tiempo_fase0 = 0;
 
 
 
@@ -91,7 +90,7 @@ pinMode(pin_motor_izquierda, OUTPUT);  // definir output para motor de la derech
 
 ////// Setup: Actualizar los estados y lectura de sensor
 
-delay(5000) // dormir 5 segundos para permitir que los sensores se estabilicen 
+delay(5000); // dormir 5 segundos para permitir que los sensores se estabilicen 
 
 fase_actual = fase_de_inicio; // declarar la fase en la que vamos a iniciar (con el parametro de mision fase_de_inicio) 
 
@@ -106,17 +105,17 @@ fase_actual = fase_de_inicio; // declarar la fase en la que vamos a iniciar (con
 /// TODO: gps_longitud_actual = 
 
 if(DEBUG){
-  Serial.println("-------------Lectura inicial------------")
-  Serial.print("altura_inicial: ")
-  Serial.print(altura_inicial)
-  Serial.print("altura_inicial: ")
-  Serial.print(altura_inicial)
-  Serial.print("altura_inicial: ")
-  Serial.print(altura_inicial)
-  Serial.print("altura_inicial: ")
-  Serial.print(altura_inicial)
-  Serial.print("altura_inicial: ")
-  Serial.print(altura_inicial)
+  Serial.println("-------------Lectura inicial------------");
+  Serial.print("altura_inicial: ");
+  Serial.print(altura_inicial);
+  Serial.print("velocidad_vertical_actual: ");
+  Serial.print(velocidad_vertical_actual);
+  Serial.print("heading_actual: ");
+  Serial.print(heading_actual);
+  Serial.print("gps_latitud_actual: ");
+  Serial.print(gps_latitud_actual);
+  Serial.print("gps_longitud_actual: ");
+  Serial.print(gps_longitud_actual);
 }
 
 }
@@ -130,6 +129,22 @@ void loop() {
 switch (fase_actual) {
   case 0:
     //fase_actual 1
+    if(altura_inicial + rango_altura_activacion < altura_actual){ //Si llegamos a esta condicion significa que estamos arriba de 100 metros y queremos estar en esta condicion por 10 segundos
+      
+      if(timer_activado_fase0){// si el timer ya esta activado vamos ver cuanto tiempo falta
+        if(millis() - tiempo_fase0 > 10000 ){
+          fase_actual = 1;
+        }
+      }
+      else{
+        tiempo_fase0 = millis();
+        timer_activado_fase0 = true;
+      }
+    }
+    else{
+      timer_activado_fase0 = false
+    }
+
     break;
   case 1:
 
